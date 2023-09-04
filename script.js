@@ -16,6 +16,36 @@ if (navigator.geolocation)
       console.log(
         `https://www.google.com.ua/maps/@${latitude},${longitude},14z?entry=ttu`
       );
+
+      const coords = [latitude, longitude];
+
+      const map = L.map('map').setView(coords, 13);
+      console.log(map);
+
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      map.on('click', function (mapEvent) {
+        console.log(mapEvent);
+
+        const { lat, lng } = mapEvent.latlng;
+
+        L.marker([lat, lng])
+          .addTo(map)
+          .bindPopup(
+            L.popup({
+              maxWidth: 200,
+              minWidth: 100,
+              autoClose: false,
+              closeOnClick: false,
+              className: 'running-popup',
+            })
+          )
+          .setPopupContent('Тренировка')
+          .openPopup();
+      });
     },
     function () {
       alert('Unable to get your location!');
